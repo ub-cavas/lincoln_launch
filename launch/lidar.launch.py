@@ -45,13 +45,16 @@ def generate_launch_description():
     driver_params_file = os.path.join(driver_share_dir, 'config', 'VLP32C-velodyne_driver_node-params.yaml')
     with open(driver_params_file, 'r') as f:
         driver_params = yaml.safe_load(f)['velodyne_driver_node']['ros__parameters']
-
+    print("driver_params_file:",driver_params_file)
+    print("driver_params:",driver_params)
     convert_share_dir = ament_index_python.packages.get_package_share_directory('velodyne_pointcloud')
     convert_params_file = os.path.join(convert_share_dir, 'config', 'VLP32C-velodyne_transform_node-params.yaml')
     with open(convert_params_file, 'r') as f:
         convert_params = yaml.safe_load(f)['velodyne_transform_node']['ros__parameters']
     convert_params['calibration'] = os.path.join(convert_share_dir, 'params', 'VeloView-VLP-32C.yaml')
-
+    print("convert_share_dir:",convert_share_dir)
+    print("convert_params_file:",convert_params_file)
+    print("convert_params:",convert_params)
     laserscan_share_dir = ament_index_python.packages.get_package_share_directory('velodyne_laserscan')
     laserscan_params_file = os.path.join(laserscan_share_dir, 'config', 'default-velodyne_laserscan_node-params.yaml')
     with open(laserscan_params_file, 'r') as f:
@@ -67,12 +70,13 @@ def generate_launch_description():
                     package='velodyne_driver',
                     plugin='velodyne_driver::VelodyneDriver',
                     name='velodyne_driver_node',
-                    parameters=[driver_params]),
+                    parameters=[driver_params,{'frame_id':'sensor_kit_base_link'}]),
                 ComposableNode(
                     package='velodyne_pointcloud',
                     plugin='velodyne_pointcloud::Transform',
                     name='velodyne_transform_node',
-                    parameters=[convert_params]),
+                    parameters=[convert_params,{'min_range':3.0}],
+                    remappings=[('/velodyne_points', '/sensing/lidar/top/outlier_filtered/pointcloud')]),
                 ComposableNode(
                     package='velodyne_laserscan',
                     plugin='velodyne_laserscan::VelodyneLaserScan',

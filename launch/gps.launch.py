@@ -70,7 +70,7 @@ def generate_launch_description():
                     'oem7_strict_receiver_init' : True,
                     'oem7_publish_unknown_oem7raw' : False,
                     'oem7_publish_delay' : 0.0
-
+                    
                     },
                     get_override_params() # Must be last to override
                     ],
@@ -78,14 +78,9 @@ def generate_launch_description():
         output='screen',
     )
     
-    ip_arg   = arg('oem7_ip_addr', None,               'IP Address of Oem7 Receiver, e.g. 192.168.1.2')
-    port_arg = arg('oem7_port',   '3001',              'TCP or UDP port, e.g. 3002')
-    if_arg   = arg('oem7_if',     'Oem7ReceiverTcp',   'Interface Type: Oem7ReceiverTcp or Oem7ReceiverUdp')
+    ip_arg   = arg('oem7_ip_addr', '192.168.100.201',  'IP Address of Oem7 Receiver, e.g. 192.168.1.2')
+    port_arg = arg('oem7_port',    '3005',             'TCP or UDP port, e.g. 3002')
+    if_arg   = arg('oem7_if',      'Oem7ReceiverTcp',  'Interface Type: Oem7ReceiverTcp or Oem7ReceiverUdp')
     
     return LaunchDescription([ip_arg, port_arg, if_arg, 
                               node])
-
-    
-
-
-        
